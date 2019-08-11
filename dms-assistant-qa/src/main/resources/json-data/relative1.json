@@ -1,0 +1,10 @@
+{
+  "fullName": "Relative Six Sixovich",
+  "birthDate": "2018-01-31T20:00:00.000+0000",
+  "address": "city Moscow, home 6",
+  "phoneNumber": "89009006666",
+  "insurance": {
+    "insuranceType": "BUSINESS",
+    "amount": 2000
+  }
+}

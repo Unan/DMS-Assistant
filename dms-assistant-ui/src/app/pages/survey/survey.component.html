@@ -1,0 +1,104 @@
+<main>
+  <form [formGroup]="survey" (ngSubmit)="onSubmit()" class="wrapper">
+    <h1 class="form-header">Insurance form</h1>
+    <div class="form-component basic-form-wrapper">
+      <div class="basic-form">
+        <span>Employee</span>
+        <div class="inline-items">
+          <mat-form-field class="form-item inline-item">
+            <input matInput class="readonly" type="text" readonly formControlName="familyName"
+                   placeholder="Family name">
+          </mat-form-field>
+          <mat-form-field class="form-item inline-item">
+            <input matInput type="text" class="readonly" readonly formControlName="firstName" placeholder="First name">
+          </mat-form-field>
+          <mat-form-field class="form-item inline-item">
+            <input matInput type="text" class="readonly" readonly formControlName="secondName"
+                   placeholder="Second name">
+          </mat-form-field>
+        </div>
+        <div class="inline-items">
+          <mat-form-field class="form-item inline-item">
+            <input matInput [matDatepicker]="pickerDateOfBirth" class="readonly" readonly formControlName="birthDate"
+                   placeholder="Date of birth">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateOfBirth"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateOfBirth disabled></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="form-item inline-item">
+            <input matInput type="tel" class="readonly" readonly formControlName="phoneNumber"
+                   placeholder="Phone number">
+          </mat-form-field>
+        </div>
+        <mat-form-field class="form-item text-area-wrapper">
+          <textarea matInput class="text-area readonly" readonly formControlName="address" type="text"
+                    placeholder="Address"></textarea>
+        </mat-form-field>
+        <mat-form-field class="form-item">
+          <input matInput type="text" class="readonly" readonly formControlName="role" placeholder="Position">
+        </mat-form-field>
+        <mat-form-field class="form-item">
+          <input matInput [matDatepicker]="pickerDateOfEmployment" class="readonly" readonly formControlName="hireDate"
+                 placeholder="Employment date">
+          <mat-datepicker-toggle matSuffix [for]="pickerDateOfEmployment"></mat-datepicker-toggle>
+          <mat-datepicker #pickerDateOfEmployment disabled></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="form-item">
+          <mat-select formControlName="insuranceType">
+            <mat-option *ngFor="let name of enumOptions" [value]="name">
+              {{name | insuranceType}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="button-add-wrapper">
+      <div>Add person</div>
+      <button class="button-add" type="button" (click)="addAdditionalPerson()" mat-fab color="white">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <div class="form-component flex-wrapper" *ngFor="let person of relatives.controls; index as i">
+      <div class="form-component basic-form-wrapper" [formGroup]="person">
+        <div class="basic-form">
+          <div class="inline-items">
+            <mat-form-field class="form-item inline-item">
+              <input matInput type="text" formControlName="familyName" placeholder="Family name">
+            </mat-form-field>
+            <mat-form-field class="form-item inline-item">
+              <input matInput type="text" formControlName="firstName" placeholder="First name">
+            </mat-form-field>
+            <mat-form-field class="form-item inline-item">
+              <input matInput type="text" formControlName="secondName" placeholder="Second name">
+            </mat-form-field>
+          </div>
+          <div class="inline-items">
+            <mat-form-field class="form-item inline-item">
+              <input matInput [max]="maxDate" formControlName="birthDate" [matDatepicker]="pickerDateOfBirth"
+                     placeholder="Date of birth" readonly>
+              <mat-datepicker-toggle matSuffix [for]="pickerDateOfBirth"></mat-datepicker-toggle>
+              <mat-datepicker #pickerDateOfBirth></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="form-item inline-item">
+              <input matInput formControlName="phoneNumber" type="tel" placeholder="Phone number">
+            </mat-form-field>
+          </div>
+          <mat-form-field class="form-item text-area-wrapper">
+            <textarea matInput formControlName="address" class="text-area" type="text" placeholder="Address"></textarea>
+          </mat-form-field>
+          <mat-form-field class="form-item">
+            <mat-select formControlName="insuranceType">
+              <mat-option *ngFor="let name of enumOptions" [value]="name">
+                {{name | insuranceType}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <button class="button-delete" type="button" (click)="removeAdditionalPerson(i)" mat-fab color="white">
+        <mat-icon>remove</mat-icon>
+      </button>
+    </div>
+    <button type="submit" class="button-save" mat-raised-button color="warn">Save</button>
+  </form>
+</main>
+

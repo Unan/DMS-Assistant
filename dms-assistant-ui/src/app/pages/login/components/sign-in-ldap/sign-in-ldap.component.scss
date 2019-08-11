@@ -1,0 +1,17 @@
+@import "../../../../shared/styles/variables";
+
+.ldap-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.btn-submit {
+  width: 300px;
+  color: $white;
+  background-color: $base-color;
+}

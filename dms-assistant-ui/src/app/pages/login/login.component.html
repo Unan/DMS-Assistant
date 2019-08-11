@@ -1,0 +1,44 @@
+<div class="login">
+  <div class="login-header">
+    <div class="login-welcome">
+      <img class="login-welcome-img" src="/assets/images/app-icon.svg">
+      <h3 class="login-welcome-title">Welcome to Grid Dynamics!</h3>
+      <p class="login-welcome-description">Please sign in to your account to start using the application</p>
+    </div>
+  </div>
+  <div class="login-main">
+    <div class="login-fields">
+      <div class="error-container">
+        <div *ngIf="errorMessage" class="error-container-box">
+          <span class="error-container-text"><i class="fas fa-info-circle"></i> {{errorMessage}}</span>
+        </div>
+      </div>
+      <div *ngIf="!isLdap">
+        <app-sign-in-google (changed)="onChangedGoogle($event)"></app-sign-in-google>
+      </div>
+      <div *ngIf="isLdap">
+        <app-sign-in-ldap (changed)="onChangedLdap($event)"></app-sign-in-ldap>
+      </div>
+      <div class="login-toggle" (click)="toggleAuthType()" >
+        Sign in with
+        <span *ngIf="!isLdap">login</span>
+        <span *ngIf="isLdap">Google</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-company">
+      <img class="footer-company-logo" src="/assets/images/logo.svg">
+      <span class="footer-company-name">Grid Dynamics</span>
+    </div>
+    <div class="footer-link">
+      <i class="far fa-question-circle"></i>
+      <a class="footer-link" href="mailto:ingrid-support@griddynamics.com">
+        <span class="footer-link-text">Help & feedback</span>
+      </a>
+    </div>
+    <div class="footer-divider"></div>
+    <span class="copyright">Grid Dynamics © 2006-2019</span>
+  </footer>
+</div>

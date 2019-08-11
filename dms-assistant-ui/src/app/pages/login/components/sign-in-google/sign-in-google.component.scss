@@ -1,0 +1,36 @@
+@import "../../../../shared/styles/variables";
+
+.google {
+
+  &-icon {
+    background: $white;
+    height: 40px;
+    width: 40px;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 10px 10px 0;
+  }
+
+  &-sign-in {
+    background: $base-color;
+    color: $white;
+
+    &-container {
+      display: flex;
+      height: 100%;
+      width: 100%;
+      border-radius: 4px;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    &-text {
+      font-size: 18px;
+      flex: 1 0;
+      margin: 0 17px;
+    }
+  }
+}

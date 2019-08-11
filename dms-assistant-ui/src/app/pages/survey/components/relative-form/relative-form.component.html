@@ -1,0 +1,32 @@
+<div class="basic-form-wrapper">
+  <div class="basic-form">
+    <span>Additional person</span>
+    <mat-form-field class="form-item">
+      <input matInput type="text" placeholder="Full name">
+    </mat-form-field>
+    <div class="inline-items">
+      <mat-form-field class="form-item inline-item">
+        <input matInput [matDatepicker]="pickerDateOfBirth" placeholder="Date of birth">
+        <mat-datepicker-toggle matSuffix [for]="pickerDateOfBirth"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDateOfBirth></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="form-item inline-item">
+        <input matInput type="tel" placeholder="Phone number">
+      </mat-form-field>
+    </div>
+    <mat-form-field class="form-item text-area-wrapper">
+      <textarea matInput class="text-area" type="text" placeholder="Address"></textarea>
+    </mat-form-field>
+    <mat-form-field class="form-item">
+      <select matNativeControl (change)="parseValue($event.target.value)">
+        <option *ngFor="let name of enumOptions" [value]="name">{{name}}
+        </option>
+      </select>
+    </mat-form-field>
+  </div>
+</div>
+<div class="flex-wrapper">
+  <button class="button-icon" type="submit" (click)="removeAdditionalPerson()" mat-fab color="white">
+    <mat-icon>remove</mat-icon>
+  </button>
+</div>

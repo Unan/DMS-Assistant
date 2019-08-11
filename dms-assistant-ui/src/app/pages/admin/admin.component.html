@@ -1,0 +1,26 @@
+<div class="container">
+  <h1 class="article">Admin page</h1>
+  <div class="header">
+    <div class="filter">
+      <mat-form-field>
+        <mat-select placeholder="Show insurances:" [(ngModel)]="selectedValue" name="conditions">
+          <mat-option *ngFor="let condition of conditions" [value]="condition.value">
+            {{condition.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <button type="submit" (click)="redirectToSurvey()" mat-raised-button class="fill-survey-btn">
+            <span class="fill-survey-btn-text">Fill survey</span>
+          </button>
+      <button type="submit" mat-raised-button class="log-out-btn">
+        <span class="log-out-btn-text">Log out</span>
+      </button>
+      
+    </div>
+  </div>
+  <app-employee-table [selectedValue]="selectedValue"></app-employee-table>
+  <app-report-btn></app-report-btn>
+  <app-insurance-prices></app-insurance-prices>
+</div>

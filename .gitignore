@@ -1,0 +1,44 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+*.iml
+*/target/*
+**/.DS_Store
+
+# compiled output
+dms-assistant-ui/dist
+dms-assistant-ui/tmp
+dms-assistant-ui/out-tsc
+
+# dependencies
+dms-assistant-ui/node_modules/
+
+# profiling files
+dms-assistant-ui/chrome-profiler-events.json
+dms-assistant-ui/speed-measure-plugin.json
+
+# IDEs and editors
+.idea/
+**/.idea/**
+dms-assistant-ui/.idea
+
+# misc
+dms-assistant-ui/.sass-cache
+dms-assistant-ui/connect.lock
+dms-assistant-ui/coverage
+dms-assistant-ui/libpeerconnection.log
+dms-assistant-ui/npm-debug.log
+dms-assistant-ui/testem.log
+dms-assistant-ui/typings
+
+# System Files
+dms-assistant-ui/.DS_Store
+dms-assistant-ui/Thumbs.db
+
+# AQA
+**/*.idea
+*/*target
+*/*.iml
+**/.DS_Store
+dms-assistant-qa/.allure
+dms-assistant-qa/allure-results
+dms-assistant-qa/build

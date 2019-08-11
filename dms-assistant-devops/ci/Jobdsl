@@ -1,0 +1,303 @@
+job('provision-aws-instance-dsl') {
+  parameters{
+  	choiceParam('NAME_ENV', ['dms-qa01',
+                             'dms-qa02',
+                             'dms-qa03',
+							 'dms-qa04'])
+  }
+  wrappers{
+  environmentVariables(ANSIBLE_HOST_KEY_CHECKING: 'false')
+  }
+  wrappers{
+    credentialsBinding {
+    amazonWebServicesCredentialsBinding {
+      accessKeyVariable("AWS_ACCESS_KEY_ID")
+      secretKeyVariable("AWS_SECRET_ACCESS_KEY")
+      credentialsId("aws_master")
+      }
+    }
+  }
+  wrappers {
+        sshAgent('81f3fc16-f9a7-4a95-bed2-f6405191eb5e')
+    }
+  wrappers {
+        preBuildCleanup()
+  }
+  wrappers {
+        colorizeOutput(colorMap = 'xterm')
+    }
+  scm {
+  	git {
+    	remote {
+        	github('griddynamics/DMS-Assistant', 'https')
+            credentials('gitKK')
+        }
+        branch('dev')
+    }
+  }
+  steps {
+  	shell('''
+		rm -rf /root/.terraform.d/* || true
+		export AWS_DEFAULT_REGION=us-west-2
+		cd dms-assistant-devops/terraform
+		terraform init
+		terraform apply -auto-approve -var "BUILD_NUMBER=$BUILD_NUMBER" -var "NAME_INSTANCE=$NAME_ENV"
+		terraform output public_ip > ip.txt
+		terraform output public_ip > ip.html
+		echo "$NAME_ENV ansible_host=$(terraform output public_ip)" >> ../../../storage/ansible/inventory.txt
+		mkdir ../../../storage/create-aws-instance/$BUILD_NUMBER
+		cp -r * ../../../storage/create-aws-instance/$BUILD_NUMBER/
+		mkdir ../../../storage/terminate-aws-instances/$NAME_ENV
+		cp -r * ../../../storage/terminate-aws-instances/$NAME_ENV/
+		instance_id=$(terraform output instance_id)
+		aws ec2 wait instance-status-ok --instance-ids $instance_id
+	''')
+  	ansiblePlaybook('dms-assistant-devops/ansible/configure.yml') {
+        inventoryPath('dms-assistant-devops/terraform/ip.txt')
+        ansibleName('ansible')
+        credentialsId('81f3fc16-f9a7-4a95-bed2-f6405191eb5e')
+        forks(5)
+        unbufferedOutput(true)
+        colorizedOutput(true)
+        hostKeyChecking(false)
+        additionalParameters()
+    }
+  }
+
+}
+job('deploy-job-dsl') {
+  parameters{
+    activeChoiceParam('APP_VER') {
+            description('Select application version')
+            filterable()
+            choiceType('SINGLE_SELECT')
+            groovyScript {
+                script('''import jenkins.model.*
+def uname
+def upasswd
+def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+                            com.cloudbees.plugins.credentials.Credentials.class,
+                            Jenkins.instance,
+                            null,
+                            null
+                    );
+
+                    for (c in creds){
+                      if (c.id == "registry") {
+                      uname = c.getUsername()
+                      upasswd = c.getPassword().toString()
+                      }
+                    }
+
+
+def addr       = "https://ci-dms.ap.aws.griddynamics.net:5000/v2/dms-assistant/tags/list"
+def authString = "${uname}:${upasswd}".getBytes().encodeBase64().toString()
+
+def conn = addr.toURL().openConnection()
+conn.setRequestProperty( "Authorization", "Basic ${authString}" )
+
+def slurper = new groovy.json.JsonSlurper()
+def result = slurper.parseText(conn.content.text)
+
+return result.tags
+				''' )
+                fallbackScript('return ["ERROR"]')
+
+             }
+    choiceParam('ENV_TYPE', ['',
+                             'qa',
+                             'dev'])
+  	choiceParam('NAME_ENV', ['dms-qa01',
+                             'dms-qa02',
+                             'dms-qa03',
+							 'dms-qa04'])
+    stringParam('smtp_host', 'https://ci-dms.ap.aws.griddynamics.net', 'smtp host')
+    stringParam('smtp_username', 'Adm', 'smtp user name')
+    stringParam('smtp_password', '123', 'smtp password')
+    stringParam('smtp_port', '1025', 'smtp port')
+    stringParam('admin', 'kkdeop@gmail.com', 'admin email')
+    booleanParam('smtp_auth', false)
+    booleanParam('smtp_starttls_enable', false)
+  }
+
+  wrappers{
+  environmentVariables(ANSIBLE_HOST_KEY_CHECKING: 'false')
+  }
+  wrappers{
+    credentialsBinding {
+    usernamePassword("USERNAME",
+                     "PASSWORD",
+                     "registry")
+    string("REGISTRY_URL","registry_url")
+    }
+  }
+  wrappers {
+        sshAgent('81f3fc16-f9a7-4a95-bed2-f6405191eb5e')
+    }
+  wrappers {
+        preBuildCleanup()
+  }
+  wrappers {
+        colorizeOutput(colorMap = 'xterm')
+    }
+  scm {
+  	git {
+    	remote {
+        	github('griddynamics/DMS-Assistant', 'https')
+            credentials('gitKK')
+        }
+        branch('dev')
+    }
+  }
+  steps {
+  	ansiblePlaybook('dms-assistant-devops/ansible/deploy.yml') {
+        inventoryPath('../storage/ansible/inventory.txt')
+        ansibleName('ansible')
+        credentialsId('81f3fc16-f9a7-4a95-bed2-f6405191eb5e')
+        forks(5)
+        unbufferedOutput(true)
+        colorizedOutput(true)
+        hostKeyChecking(false)
+        additionalParameters()
+      extraVars {
+            extraVar("username",'$USERNAME',true)
+        	extraVar("password",'$PASSWORD',true)
+       		extraVar("registry_url",'$REGISTRY_URL',true)
+        	extraVar("host",'$NAME_ENV',false)
+        	extraVar("profile",'$ENV_TYPE',false)
+            extraVar("image",'$REGISTRY_URL/dms-assistant:$APP_VER',false)
+            extraVar("smtp_host",'$smtp_host',false)
+            extraVar("smtp_username",'$smtp_username',true)
+            extraVar("smtp_password",'$smtp_password',true)
+            extraVar("smtp_port","1025",false)
+            extraVar("smtp_auth",'$smtp_auth',false)
+            extraVar("smtp_starttls_enable",'$smtp_starttls_enable',false)
+            extraVar("admin",'$admin',false)
+
+        }
+    }
+  }
+
+}
+}
+
+job('build-dev-job'){
+  wrappers{
+  environmentVariables(ANSIBLE_HOST_KEY_CHECKING: 'false')
+  }
+  wrappers{
+    credentialsBinding {
+    amazonWebServicesCredentialsBinding {
+      accessKeyVariable("AWS_ACCESS_KEY_ID")
+      secretKeyVariable("AWS_SECRET_ACCESS_KEY")
+      credentialsId("aws_master")
+      string("REGISTRY_URL","registry_url")
+      usernamePassword("USERNAME",
+                     "PASSWORD",
+                     "registry")
+      }
+    }
+  }
+  wrappers {
+        sshAgent('81f3fc16-f9a7-4a95-bed2-f6405191eb5e')
+    }
+  wrappers {
+        preBuildCleanup()
+  }
+  wrappers {
+        colorizeOutput(colorMap = 'xterm')
+    }
+  scm {
+  	git {
+    	remote {
+        	github('griddynamics/DMS-Assistant', 'https')
+            credentials('gitKK')
+        }
+        branch('dev')
+    }
+  }
+  triggers {
+  cron("H/15 * * * *")
+  }
+  steps {
+    maven {
+      mavenInstallation('mvn 3.6.0')
+      property('USER_REGISTRY','${USERNAME}')
+      property('BUILD_NUMBER','${BUILD_NUMBER}')
+      property('PASSWORD_REGISTRY', '${PASSWORD}')
+        injectBuildVariables(true)
+      goals("-B clean install -P Docker  -DskipTests   ")
+
+    }
+  shell('echo "APP_VER=1.0.0-${BUILD_TIMESTAMP}-${BUILD_NUMBER}" > ../storage/image_name/image.txt')
+  shell('''
+		rm -rf /root/.terraform.d/* || true
+		export AWS_DEFAULT_REGION=us-west-2
+		cd dms-assistant-devops/terraform
+		terraform init
+		terraform apply -auto-approve -var "BUILD_NUMBER=$BUILD_NUMBER" -var "NAME_INSTANCE=dms-qa05"
+		terraform output public_ip > ip.txt
+		terraform output public_ip > ip.html
+		echo "dms-qa05 ansible_host=$(terraform output public_ip)" >> ../../../storage/ansible/inventory.txt
+		mkdir ../../../storage/terminate-aws-instances/dms-qa05
+		cp -r * ../../../storage/terminate-aws-instances/dms-qa05
+		instance_id=$(terraform output instance_id)
+		aws ec2 wait instance-status-ok --instance-ids $instance_id
+	''')
+  	ansiblePlaybook('dms-assistant-devops/ansible/configure.yml') {
+        inventoryPath('dms-assistant-devops/terraform/ip.txt')
+        ansibleName('ansible')
+        credentialsId('81f3fc16-f9a7-4a95-bed2-f6405191eb5e')
+        forks(5)
+        unbufferedOutput(true)
+        colorizedOutput(true)
+        hostKeyChecking(false)
+        additionalParameters()
+    }
+    wrappers {
+    environmentVariables {
+    propertiesFile('../storage/image_name/image.txt')
+  }
+    }
+
+    ansiblePlaybook('dms-assistant-devops/ansible/deploy.yml') {
+        inventoryPath('../storage/ansible/inventory.txt')
+        ansibleName('ansible')
+        credentialsId('81f3fc16-f9a7-4a95-bed2-f6405191eb5e')
+        forks(5)
+        unbufferedOutput(true)
+        colorizedOutput(true)
+        hostKeyChecking(false)
+        additionalParameters()
+       extraVars {
+            extraVar("username",'$USERNAME',true)
+        	extraVar("password",'$PASSWORD',true)
+       		extraVar("registry_url",'$REGISTRY_URL',true)
+        	extraVar("host",'dms-qa05',false)
+        	extraVar("profile",'qa',false)
+            extraVar("image",'$REGISTRY_URL/dms-assistant:$APP_VER',false)
+            extraVar("smtp_host",'https://ci-dms.ap.aws.griddynamics.net',false)
+            extraVar("smtp_username",'123',true)
+            extraVar("smtp_password",'123',true)
+            extraVar("smtp_port","1025",false)
+            extraVar("smtp_auth",'false',false)
+            extraVar("smtp_starttls_enable",'false',false)
+            extraVar("admin",'kkdeop@gmail.com',false)
+
+        }
+    }
+    maven {
+           mavenInstallation('mvn 3.6.0')
+           goals('-B clean test -Dselenide.baseUrl=http://dms-qa05.ap.aws.griddynamics.net -Dserver.address=http://dms-qa05.ap.aws.griddynamics.net -DHomePageURL=http://dms-qa05.ap.aws.griddynamics.net -Dselenide.headless=true -Dsmtp.address=https://ci-dms.ap.aws.griddynamics.net:8025 -Dchromeoptions.args=no-sandbox  site')
+           rootPOM('dms-assistant-qa/pom.xml')
+
+
+    }
+    wrappers {
+    	     publishers {
+ 			   allure(['dms-assistant-qa/target/allure-results'])
+			 }
+    }
+
+  }
+}

@@ -1,0 +1,31 @@
+@import "../../shared/styles/variables";
+
+.container {
+  width: 80%;
+  margin: auto;
+}
+
+.filter {
+  display: block;
+}
+
+.log-out-btn {
+  margin-left: 20px;
+  color: $white;
+  background-color: $light-yellow;
+}
+.fill-survey-btn {
+  color: $white;
+  background-color: $base-color;
+}
+
+.article {
+  text-align: center;
+  color: $base-color;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

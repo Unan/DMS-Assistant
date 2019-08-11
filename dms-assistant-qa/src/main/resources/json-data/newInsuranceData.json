@@ -1,0 +1,23 @@
+{
+  "standardAmount": 12301,
+  "businessAmount": 13451,
+  "vipAmount": 1032454,
+  "vipChildAmount": 1,
+  "rates": [
+    {
+      "min": 0,
+      "max": 13,
+      "coefficient": 1.7
+    },
+    {
+      "min": 16,
+      "max": 71,
+      "coefficient": 0.8
+    },
+    {
+      "min": 93,
+      "max": 274,
+      "coefficient": 2.5
+    }
+  ]
+}

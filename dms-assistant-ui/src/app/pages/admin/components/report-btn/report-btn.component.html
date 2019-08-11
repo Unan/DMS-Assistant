@@ -1,0 +1,17 @@
+<div class="action">
+  <div class="action-report">
+    <button type="submit" mat-raised-button class="action-report-btn">
+      <span class="action-report-btn-text">Make a report</span>
+    </button>
+  </div>
+  <div class="action-notify-unfilled">
+    <button (click)="notifyUnfilled()" mat-raised-button class="action-notify-unfilled-btn" [disabled]="isUnfilledProcessed">
+      <span class="action-notify-unfilled-btn-text">Notify unfilled</span>
+    </button>
+  </div>
+  <div class="action-notify-all">
+    <button (click)="notifyAll()" mat-raised-button class="action-notify-all-btn" [disabled]="isAllProcessed">
+      <span class="action-notify-all-btn-text">Notify all</span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+{
+  "employee": [
+    {
+      "id": 1,
+      "firstname": "James",
+      "secondname": "Hetfield"
+    },
+    {
+      "id": 2,
+      "firstname": "Oliver",
+      "secondname": "Sykes"
+    },
+    {
+      "id": 3,
+      "firstname": "Angus",
+      "secondname": "Young"
+    },
+    {
+      "id": 4,
+      "firstname": "Tyrion",
+      "secondname": "Lannister"
+    },
+    {
+      "id": 5,
+      "firstname": "John",
+      "secondname": "Snow"
+    }
+  ],
+  "insurance": [
+    {
+      "id": 1,
+      "insurancetype": "Basic",
+      "totalcost": 1000
+    },
+    {
+      "id": 2,
+      "insurancetype": "V.I.P.",
+      "totalcost": 2000
+    },
+    {
+      "id": 3,
+      "insurancetype": "Basic",
+      "totalcost": 3000
+    },
+    {
+      "id": 4,
+      "insurancetype": "Business",
+      "totalcost": 4000
+    },
+    {
+      "id": 5,
+      "insurancetype": "V.I.P.",
+      "totalcost": 5000
+    },
+    {
+      "id": 6,
+      "insurancetype": "Basic",
+      "totalcost": 6000
+    },
+    {
+      "id": 7,
+      "insurancetype": "V.I.P.",
+      "totalcost": 7000
+    },
+    {
+      "id": 8,
+      "insurancetype": "Basic",
+      "totalcost": 8000
+    },
+    {
+      "id": 9,
+      "insurancetype": "Business",
+      "totalcost": 9000
+    },
+    {
+      "id": 10,
+      "insurancetype": "V.I.P.",
+      "totalcost": 10000
+    }
+  ],
+  "survey": {
+    "fullName": "emp1",
+    "email": "emp1@mail.ru",
+    "birthDate": "10/25/2003",
+    "address": "Home address is your mommy",
+    "phoneNumber": "123456",
+    "insurance": {
+      "id": 1,
+      "insuranceType": "VIP",
+      "amount": 5
+    },
+    "hireDate": "02/30/2015",
+    "role": "HR",
+    "relatives": [
+      {
+        "id": 7,
+        "fullName": "rel1",
+        "birthDate": null,
+        "address": null,
+        "phoneNumber": null,
+        "insurance": {
+          "id": 4,
+          "insuranceType": "NONE",
+          "amount": 0
+        }
+      },
+      {
+        "id": 8,
+        "fullName": "rel2",
+        "birthDate": null,
+        "address": null,
+        "phoneNumber": null,
+        "insurance": {
+          "id": 5,
+          "insuranceType": "BUSINESS",
+          "amount": 3
+        }
+      }
+    ]
+  }
+}

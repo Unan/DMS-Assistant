@@ -1,0 +1,155 @@
+@import "../../shared/styles/variables";
+
+.login {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: $dark-font-color;
+
+  &-header {
+    flex: 1 0 300px;
+    background-color: $white;
+    box-shadow: 0 1px 2px 0 rgba($dark-grey, .05), 0 2px 4px 0 rgba($dark-grey, .1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-main {
+    padding-top: 20px;
+    flex: 1 0 200px;
+    display: flex;
+    justify-content: center;
+    min-height: 300px;
+  }
+
+  &-welcome {
+    max-width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-img {
+      width: 120px;
+      height: 120px;
+    }
+
+    &-title {
+      font-family: $default-font;
+      margin-top: 48px;
+      font-weight: 600;
+      font-size: 22px;
+      color: $dark-grey;
+      text-align: center;
+      letter-spacing: 0;
+      width: 300px;
+    }
+
+    &-description {
+      text-align: center;
+      margin-top: 16px;
+      margin-bottom: 48px;
+      font-weight: 300;
+      line-height: 24px;
+      font-size: 16px;
+      color: rgba($dark-grey, .54);
+    }
+  }
+
+  &-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 260px;
+
+    &-form {
+      width: 100%;
+    }
+  }
+
+  &-toggle {
+    margin-top: 16px;
+    font-size: 14px;
+    color: rgba($dark-grey, .54);
+    line-height: 24px;
+
+    &:hover {
+      color: $dark-grey;
+      cursor: pointer;
+    }
+  }
+}
+
+.error-container {
+  width: 100%;
+  min-height: 50px;
+
+  &-box {
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    color: $white;
+    background-color: $warn-color;
+    margin-bottom: 8px;
+  }
+
+  &-text {
+    font-size: 15px;
+    padding: 3px 0 3px 15px;
+  }
+}
+
+.footer {
+
+  &-company {
+    display: flex;
+    align-items: center;
+
+    &-logo {
+      padding: 4px;
+      width: 32px;
+      height: 32px;
+    }
+
+    &-name {
+      color: $dark-grey;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  &-link {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+
+    &-contain {
+      display: flex;
+      align-items: center;
+      color: rgba($dark-grey, .54);
+    }
+
+    &-text {
+      color: rgba($dark-grey, .54);
+      text-decoration: none;
+      font-weight: 600;
+      padding-left: 5px;
+    }
+  }
+
+  &-divider {
+    height: 32px;
+    width: 0;
+    border-left: 1px solid $light-gray;
+    margin: 0 24px;
+  }
+}
+
+.copyright {
+  color: rgba($dark-grey, .38);
+  font-size: 16px;
+  font-weight: 400;
+}

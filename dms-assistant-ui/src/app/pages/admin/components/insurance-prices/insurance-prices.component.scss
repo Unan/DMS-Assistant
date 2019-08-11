@@ -1,0 +1,47 @@
+@import "../../../../shared/styles/variables";
+
+.prices {
+
+  display: flex;
+
+  &-header {
+    margin: 40px 0;
+    color: $light-base-color;
+  }
+
+  &-form {
+    display: inline-block;
+    align-items: center;
+  }
+
+  &-field {
+    display: block;
+  }
+
+  &-info {
+    display: inline-block;
+    align-items: center;
+    margin: 60px;
+
+    &-header {
+      font-size: 22px;
+      color: $base-color;
+    }
+
+    &-type {
+      color: $light-base-color;
+    }
+  }
+
+  .save-prices {
+    display: block;
+    color: $white;
+    background-color: $base-color;
+    margin-top: 40px;
+
+    &-text {
+      font-size: 16px;
+      margin: 10px;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+<div class="app-sign-in-ldap">
+  <form class="ldap-form" method="post">
+    <div class="login-inputs">
+      <mat-form-field id="username" class="full-width">
+        <input name="ldap" [(ngModel)]="ldap" matInput placeholder="Username">
+      </mat-form-field>
+      <button (click)="signInEmit()" type="submit" mat-raised-button class="btn-submit">Sign in now</button>
+    </div>
+  </form>
+</div>
