@@ -39,7 +39,7 @@
         <spring-boot.version>2.1.2.RELEASE</spring-boot.version>
         <spring-data.version>2.1.4.RELEASE</spring-data.version>
         <javax.persistence-api.version>2.2</javax.persistence-api.version>
-        <h2.version>1.4.197</h2.version>
+        <h2.version>2.0.206</h2.version>
         <tools.sso-starter.version>0.4.0-SNAPSHOT</tools.sso-starter.version>
         <docker-maven-plugin.version>0.19.1</docker-maven-plugin.version>
         <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
